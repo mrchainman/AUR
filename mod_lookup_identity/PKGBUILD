@@ -1,0 +1,33 @@
+#Maintainer: Mr Chainman <mrchainman@chainman.xyz>
+
+pkgname=mod_lookup_identity
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Apache module to lookup user and retrieve additional information about the authenticated user."
+arch=('x86_64')
+url="http://www.adelton.com/apache/mod_lookup_identity/"
+license=('Apache License, Version 2.0')
+depends=('sssd' 'apache')
+install="$pkgname.install"
+source=("https://www.adelton.com/apache/mod_lookup_identity/$pkgname-$pkgver.tar.gz")
+md5sums=('9f0f0e07fa514c7068432855096fa6cc')
+
+prepare() {
+	cd "$pkgname-$pkgver"
+}
+
+build() {
+	cd "$pkgname-$pkgver"
+	apxs -c $(pkg-config --cflags dbus-1) $(pkg-config --libs dbus-1) \
+	 -Wc,"-Wall -pedantic -std=c99" \
+	 -o mod_lookup_identity.so \
+	 mod_lookup_identity.c
+}
+
+package() {
+	cd "$pkgname-$pkgver"
+	install -Dm644 .libs/$pkgname.so $pkgdir/usr/lib/httpd/modules/$pkgname.so
+	install -Dm644 README $pkgdir/usr/share/doc/$pkgname/README
+	install -Dm644 LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}
+
