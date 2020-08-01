@@ -6,15 +6,10 @@ pkgrel=1
 pkgdesc="Apache module to lookup user and retrieve additional information about the authenticated user."
 arch=('x86_64')
 url="http://www.adelton.com/apache/mod_lookup_identity/"
-license=('Apache License, Version 2.0')
+license=('Apache')
 depends=('sssd' 'apache')
-install="$pkgname.install"
 source=("https://www.adelton.com/apache/mod_lookup_identity/$pkgname-$pkgver.tar.gz")
-md5sums=('9f0f0e07fa514c7068432855096fa6cc')
-
-prepare() {
-	cd "$pkgname-$pkgver"
-}
+sha256sums=('940f02a73b6d040a8aafee3895b71172a6e1c8d9475f68bf2476027bcd90149c')
 
 build() {
 	cd "$pkgname-$pkgver"
@@ -26,8 +21,7 @@ build() {
 
 package() {
 	cd "$pkgname-$pkgver"
-	install -Dm644 .libs/$pkgname.so $pkgdir/usr/lib/httpd/modules/$pkgname.so
+	install -Dm755 .libs/$pkgname.so $pkgdir/usr/lib/httpd/modules/$pkgname.so
 	install -Dm644 README $pkgdir/usr/share/doc/$pkgname/README
-	install -Dm644 LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
 }
 
